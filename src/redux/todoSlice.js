@@ -1,43 +1,28 @@
 // Centralise la logique métier, ici la gestion des tâches
-import { produce } from "immer";
+
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [];
 
-// Convention de nommage du type d'action
-const ADD_TODO = "todos/addTodo";
-const TOGGLE_TODO = "todos/toggleTodo";
-
-const todoSlice = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_TODO:
-      return produce(state, (draft) => {
-        draft.push({
-          id: Date.now(),
-          text: action.payload,
-          completed: false,
-        });
+const todoSlice = createSlice({
+  name: "todos",
+  initialState,
+  reducers: {
+    addTodo: (state, action) => {
+      state.push({
+        id: Date.now(),
+        text: action.payload,
+        completed: false,
       });
-    case TOGGLE_TODO:
-      return produce(state, (draft) => {
-        // On va cherche l'élément dont l'id ===
-        const todo = draft.find((element) => element.id === action.payload);
-        if (todo) {
-          todo.completed = !todo.completed;
-        }
-      });
-    default:
-      return state;
-  }
-};
-
-export const addTodo = (text) => ({
-  type: ADD_TODO,
-  payload: text,
+    },
+    toggleTodo: (state, action) => {
+      const todo = state.find((element) => element.id === action.payload);
+      if (todo) {
+        todo.completed = !todo.completed; 
+      }
+    },
+  },
 });
 
-export const toggleTodo = (id) => ({
-  type: TOGGLE_TODO,
-  payload: id,
-});
-
-export default todoSlice;
+export const { addTodo, toggleTodo } = todoSlice.actions;
+export default todoSlice.reducer;
