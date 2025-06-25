@@ -19,7 +19,7 @@ const todoSlice = (state = initialState, action) => {
       });
     case TOGGLE_TODO:
       return produce(state, (draft) => {
-        // On va cherche l'élément dont l'id === 
+        // On va cherche l'élément dont l'id ===
         const todo = draft.find((element) => element.id === action.payload);
         if (todo) {
           todo.completed = !todo.completed;
